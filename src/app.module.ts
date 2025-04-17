@@ -15,7 +15,7 @@ import { VeiculoModule } from './veiculo/veiculo.module';
       password: '',  
       database: 'bdveiculos', 
       entities: [Veiculo], 
-      synchronize: true, 
+      synchronize: false,
     }), 
     VeiculoModule, 
   ], 

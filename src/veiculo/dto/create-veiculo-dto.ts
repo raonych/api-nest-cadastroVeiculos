@@ -3,8 +3,9 @@ import {
   Length,
   IsInt,
   IsOptional,
-  IsDateString,
+  IsEnum
 } from 'class-validator';
+import { CategoriaVeiculo } from '../../enums/categoria-veiculos.enum';
 
 export class CreateVeiculoDto {
   @IsString()
@@ -39,8 +40,6 @@ export class CreateVeiculoDto {
   @Length(0, 20)
   tipo_combustivel?: string;
 
-  @IsOptional()
-  @IsString()
-  @Length(0, 30)
-  categoria?: string;
+  @IsEnum(CategoriaVeiculo,{ message: 'Categoria inválida.' })
+  categoria?: CategoriaVeiculo;
 }

@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {CategoriaVeiculo} from '../enums/categoria-veiculos.enum';
 
 @Entity('veiculos')
 export class Veiculo { 
@@ -29,7 +30,7 @@ export class Veiculo {
   @Column({length: 20}) 
   tipo_combustivel: string; 
 
-  @Column({length: 30}) 
+  @Column({type: 'enum', enum: CategoriaVeiculo, default: CategoriaVeiculo.AUTOMOVEL}) 
   categoria: string; 
 
   @Column({ type: 'timestamp' }) 

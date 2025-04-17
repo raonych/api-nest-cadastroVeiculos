@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete} from '@nestjs/common';
 import {VeiculoService} from './veiculo.service';
 import { CreateVeiculoDto } from './dto/create-veiculo-dto';
+import { UpdateVeiculoDto } from './dto/update-veiculo-dto';
 
 @Controller('veiculo') //Rota
 export class VeiculoController {
@@ -8,11 +9,13 @@ export class VeiculoController {
   
   @Get()
   findAll(){
+    console.log('Rota GET /veiculo');
     return this.veiculoService.findAll();
   }
 
   @Post()
-  async create(@Body() createVeiculoDto : CreateVeiculoDto,) {
+  async create(@Body() createVeiculoDto : CreateVeiculoDto) {
+    console.log('Rota POST /veiculo cadastro com body:', createVeiculoDto);
     try {
         await this.veiculoService.create(
             createVeiculoDto,
@@ -29,4 +32,59 @@ export class VeiculoController {
         };
     }
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string){
+    console.log('Rota GET /veiculo/:id chamada com ID:', id);
+    try{
+      const data = await this.veiculoService.findOne(+id);
+
+      return{
+        success:true,
+        data
+      };
+    }catch(error){
+      return { 
+        success: false,
+        message: error.message
+      };
+    }
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateVeiculoDto : UpdateVeiculoDto){
+    console.log('Rota PATCH /veiculo/:id chamada com ID:', id);
+    try{
+      const data = await this.veiculoService.update(+id,updateVeiculoDto);
+      
+      return{
+        success:true,
+        message:"Veiculo atualizado com sucesso",
+        data
+      };
+    }catch(error){
+      return { 
+        success: false,
+        message: error.message
+      };
+    }
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string){
+    try{
+      await this.veiculoService.delete(+id);
+
+      return {
+        success: true,
+        message: 'Veiculo deletado com sucesso!',
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
 }
