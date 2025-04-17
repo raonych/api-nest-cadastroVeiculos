@@ -13,9 +13,9 @@ import { VeiculoModule } from './veiculo/veiculo.module';
       port: 3306, 
       username: 'root', 
       password: '',  
-      database: 'veiculos', 
+      database: 'bdveiculos', 
       entities: [Veiculo], 
-      synchronize: true, // em produção, mude para false 
+      synchronize: true, 
     }), 
     VeiculoModule, 
   ], 

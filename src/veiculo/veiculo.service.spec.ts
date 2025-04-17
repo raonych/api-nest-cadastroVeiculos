@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { VeiculoService } from './veiculo.service';
+import { Injectable } from '@nestjs/common'; 
+import {VeiculoService} from './veiculo.service';
 
 describe('VeiculoService', () => {
   let service: VeiculoService;
@@ -16,3 +17,4 @@ describe('VeiculoService', () => {
     expect(service).toBeDefined();
   });
 });
+
