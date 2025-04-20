@@ -61,4 +61,18 @@ export class VeiculoService{
 
   }
 
+  async searchVeiculos(termo: string): Promise<Veiculo[]>{
+    if (!termo) return [];
+
+    return this.veiculoRepository
+      .createQueryBuilder('veiculo')
+      .where('LOWER(veiculo.placa) LIKE LOWER(:termo)', { termo: `%${termo}%` })
+      .orWhere('LOWER(veiculo.renavam) LIKE LOWER(:termo)', { termo: `%${termo}%` })
+      .orWhere('LOWER(veiculo.marca) LIKE LOWER(:termo)', { termo: `%${termo}%` })
+      .orWhere('LOWER(veiculo.modelo) LIKE LOWER(:termo)', { termo: `%${termo}%` })
+      .orWhere('CAST(veiculo.ano_fabricacao AS TEXT) LIKE :termo', { termo: `%${termo}%` })
+      .orWhere('CAST(veiculo.ano_modelo AS TEXT) LIKE :termo', { termo: `%${termo}%` })
+      .getMany();
+    }
+
 }

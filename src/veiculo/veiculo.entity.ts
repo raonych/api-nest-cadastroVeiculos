@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
 import {CategoriaVeiculo} from '../enums/categoria-veiculos.enum';
+import { Proprietario } from '../proprietario/proprietario.entity';
 
 @Entity('veiculos')
 export class Veiculo { 
@@ -35,4 +43,8 @@ export class Veiculo {
 
   @Column({ type: 'timestamp' }) 
   data_cadastro: Date; 
+
+  @ManyToOne(() => Proprietario, (proprietario) => proprietario.veiculos, { eager: true })
+  @JoinColumn({ name: 'proprietario_id' })
+  proprietario: Proprietario;
 } 

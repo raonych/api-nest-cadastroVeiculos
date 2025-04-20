@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, Query} from '@nestjs/common';
 import {VeiculoService} from './veiculo.service';
 import { CreateVeiculoDto } from './dto/create-veiculo-dto';
 import { UpdateVeiculoDto } from './dto/update-veiculo-dto';
@@ -50,6 +50,13 @@ export class VeiculoController {
       };
     }
   }
+
+  @Get('buscar')
+  async buscarGeral(@Query('termo') termo: string) {
+    return this.veiculoService.searchVeiculos(termo);
+  }
+
+
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateVeiculoDto : UpdateVeiculoDto){
