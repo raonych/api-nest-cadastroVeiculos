@@ -33,7 +33,7 @@ export class VeiculoController {
     }
   }
 
-  @Get(':id')
+  @Get('/exibir/:id')
   async findOne(@Param('id') id: string){
     console.log('Rota GET /veiculo/:id chamada com ID:', id);
     try{
@@ -51,12 +51,46 @@ export class VeiculoController {
     }
   }
 
-  @Get('buscar')
+     
+  @Get('/buscar')
   async buscarGeral(@Query('termo') termo: string) {
-    return this.veiculoService.searchVeiculos(termo);
+    console.log('Rota GET /veiculo/buscar chamada com termo:', termo);
+    try{  
+    const busca = await this.veiculoService.searchVeiculos(termo);
+    return {
+      success: true,
+      data: busca,
+    };
+    }catch(error){
+      return { 
+        success: false,
+        message: error.message
+      };
+    }
   }
 
+  @Get('/proprietario/:id')
+  async findByProprietarioId(@Param('id')proprietarioId: string){
+    console.log('Rota GET /veiculo/proprietario/:id chamada com ID:', proprietarioId);
+    try{
+      const data = await this.veiculoService.findByProprietarioId(+proprietarioId);
+      return{
+        success:true,
+        message:"Veiculos do proprietario",
+        data
+      };
+    }catch(error){
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
 
+  @Patch(':id/vincular')
+  async vincularProprietario(@Param('id') veiculoId: number, @Body('proprietarioId') proprietarioId: number) {
+    return this.veiculoService.vincularProprietario(veiculoId, proprietarioId);
+  }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateVeiculoDto : UpdateVeiculoDto){

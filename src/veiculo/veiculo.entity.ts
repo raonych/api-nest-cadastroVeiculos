@@ -44,7 +44,7 @@ export class Veiculo {
   @Column({ type: 'timestamp' }) 
   data_cadastro: Date; 
 
-  @ManyToOne(() => Proprietario, (proprietario) => proprietario.veiculos, { eager: true })
+  @ManyToOne(() => Proprietario, (proprietario) => proprietario.veiculos, { eager: true, nullable: true })
   @JoinColumn({ name: 'proprietario_id' })
-  proprietario: Proprietario;
+  proprietario: Proprietario | null;;
 } 
