@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'; 
 import { Repository } from 'typeorm'; 
 import {Veiculo} from './veiculo.entity';
@@ -8,19 +8,24 @@ import { Proprietario } from 'src/proprietario/proprietario.entity';
 
 @Injectable()
 export class VeiculoService{
+  
+  private readonly logger = new Logger(VeiculoService.name);
+
   constructor(
     @InjectRepository(Veiculo)
     private readonly veiculoRepository: Repository<Veiculo>,
     @InjectRepository(Proprietario)
-    private readonly proprietarioRepository: Repository<Proprietario>
+    private readonly proprietarioRepository: Repository<Proprietario>,
   ){}
 
   create( createVeiculoDto: CreateVeiculoDto ): Promise<Veiculo> {
+    this.logger.debug(`Criando veículo com placa ${createVeiculoDto.placa}`);
     const veiculoData = this.veiculoRepository.create(createVeiculoDto);
     return this.veiculoRepository.save(veiculoData);
   }
 
   async findAll(): Promise<Veiculo[]>{
+    this.logger.log('Buscando todos os veículos');
     const veiculosData = await this.veiculoRepository.find();
     if (veiculosData.length === 0) {
       throw new HttpException(
@@ -42,6 +47,7 @@ export class VeiculoService{
    return veiculoData;
   }
   async findByProprietarioId(proprietarioId: number): Promise<Veiculo[]> {
+    this.logger.warn(`Buscando veiculos do proprietario de ID ${proprietarioId}`);
     const veiculosProprietario = await this.veiculoRepository.find({
       where: { proprietario: { id: proprietarioId } },
       relations: ['proprietario'],
@@ -58,6 +64,7 @@ export class VeiculoService{
   }
 
   async vincularProprietario(veiculoId: number, proprietarioId: number): Promise<Veiculo> {
+    this.logger.warn(`Vinculando proprietario de ID ${proprietarioId} com veículo de ID ${veiculoId}`);
     const veiculo = await this.veiculoRepository.findOneBy({ id: veiculoId });
     if (!veiculo) {
       throw new HttpException('Veículo não encontrado',404);
@@ -78,13 +85,14 @@ export class VeiculoService{
   }
 
   async removerProprietario(veiculoId: number): Promise<Veiculo> {
+    this.logger.warn(`Removendo proprietario do veículo com ID ${veiculoId}`);
     const veiculo = await this.veiculoRepository.findOneBy({ id: veiculoId });
  
     if (!veiculo) {
       throw new HttpException('Veículo não encontrado', 404);
     }
     
-    if(veiculo.proprietario){
+    if(!veiculo.proprietario){
       throw new HttpException('Veiculo já não possui proprietario', 409);
     }
 
@@ -94,6 +102,7 @@ export class VeiculoService{
   }
   
   async update(id: number, updateVeiculoDto: UpdateVeiculoDto): Promise<Veiculo> {
+    this.logger.warn(`Atualizando veículo com dados: ${updateVeiculoDto}`);
     const existingVeiculo = await this.findOne(id);
 
     if (!existingVeiculo) {
@@ -105,6 +114,7 @@ export class VeiculoService{
   }
 
   async delete(id: number): Promise<Veiculo> {
+    this.logger.warn(`Deletando veículo com ID ${id}`);
     const existingVeiculo = await this.findOne(id);
 
     if (!existingVeiculo) {

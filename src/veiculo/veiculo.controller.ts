@@ -70,7 +70,7 @@ export class VeiculoController {
   }
 
   @Get('/proprietario/:id')
-  async findByProprietarioId(@Param('id')proprietarioId: string){
+  async findByProprietarioId(@Param('id') proprietarioId: string){
     console.log('Rota GET /veiculo/proprietario/:id chamada com ID:', proprietarioId);
     try{
       const data = await this.veiculoService.findByProprietarioId(+proprietarioId);
@@ -88,8 +88,43 @@ export class VeiculoController {
   }
 
   @Patch(':id/vincular')
-  async vincularProprietario(@Param('id') veiculoId: number, @Body('proprietarioId') proprietarioId: number) {
-    return this.veiculoService.vincularProprietario(veiculoId, proprietarioId);
+  async vincularProprietario(@Param('id') veiculoId: string, @Body('proprietarioId') proprietarioId: string) {
+    try{
+      console.log('Rota PATCH /veiculo/:id/vincular chamada com ID:', veiculoId);
+      
+      const data = await this.veiculoService.vincularProprietario(+veiculoId, +proprietarioId);
+      
+      return{
+        success:true,
+        message: 'Proprietário vinculado com sucesso',
+        data,  
+      }
+    } catch(error){
+      return { 
+        success: false,
+        message: error.message
+      };
+    } 
+  }
+
+  @Delete(':veiculoId/desvincular')
+  async desvincularProprietario(@Param('veiculoId') veiculoId: number){
+    console.log('Rota PATCH /veiculo/:veiculoId/desvincular chamada com ID:', veiculoId);
+    try{
+     const data = await this.veiculoService.removerProprietario(veiculoId);
+
+     return{
+      success:true,
+      message:'Proprietário desvinculado com sucesso',
+      data,
+     }
+    }catch(error){
+      return{
+        success: false,
+        message: error.message
+      }
+    }
+    
   }
 
   @Patch(':id')
