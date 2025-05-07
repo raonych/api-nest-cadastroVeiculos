@@ -12,16 +12,16 @@ import { ProprietarioModule } from './proprietario/proprietario.module';
   imports: [ 
     TypeOrmModule.forRoot({ 
       type: 'mysql', 
-      host: 'localhost', 
-      port: 3306, 
-      username: 'root', 
-      password: '',  
+      host: 'mysql-db',   
+      port: 3307, 
+      username: 'root',
+      password: 'senhabanco',
       database: 'bdveiculos', 
       entities: [Veiculo, Proprietario], 
       synchronize: true,
     }), 
     VeiculoModule,
     ProprietarioModule 
-  ], 
+  ],  
 }) 
 export class AppModule {} 

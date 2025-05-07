@@ -41,7 +41,7 @@ export class Veiculo {
   @Column({type: 'enum', enum: CategoriaVeiculo, default: CategoriaVeiculo.AUTOMOVEL}) 
   categoria: string; 
 
-  @Column({ type: 'timestamp' }) 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) 
   data_cadastro: Date; 
 
   @ManyToOne(() => Proprietario, (proprietario) => proprietario.veiculos, { eager: true, nullable: true })
