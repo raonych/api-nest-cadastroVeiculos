@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { VeiculoService } from './veiculo.service';
 import { VeiculoController } from './veiculo.controller';
-import {Veiculo} from './veiculo.entity';
-import { ProprietarioModule } from 'src/proprietario/proprietario.module';
+import { Veiculo, VeiculoSchema } from './veiculo.schema';
+import { ProprietarioModule } from '../proprietario/proprietario.module';
 
-@Module({ 
-  imports: [TypeOrmModule.forFeature([Veiculo]), ProprietarioModule], 
-  providers: [VeiculoService], 
-  controllers: [VeiculoController], 
-  }) 
-  export class VeiculoModule {} 
-
-
+@Module({
+  imports: [
+    MongooseModule.forFeature([{ name: Veiculo.name, schema: VeiculoSchema }]),
+    ProprietarioModule,
+  ],
+  providers: [VeiculoService],
+  controllers: [VeiculoController],
+})
+export class VeiculoModule {}
