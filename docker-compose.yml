@@ -6,7 +6,8 @@ services:
       - "3000:3000"       
 
     depends_on:
-      - mysql-db          
+      mysql-db:
+        condition: service_healthy
 
     environment:
     - PORT=3000
@@ -14,7 +15,6 @@ services:
 
     volumes:
       - .:/app            
-      - /app/node_modules
 
     command: npm run start:dev
 
@@ -32,6 +32,13 @@ services:
 
     volumes:
       - db_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   db_data:
